@@ -1,6 +1,9 @@
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Input } from "@mui/material";
+import TextField from '@mui/material/TextField';
+import { Box } from "@mui/system";
+
 
 export default function Login() {
     const { control, register, handleSubmit, watch, formState: { errors } } = useForm({
@@ -13,28 +16,38 @@ export default function Login() {
 
 
     return (
-        <div>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <div>
-                    <label htmlFor="username">Username: </label>
-                    <Controller
-                        name="username"
-                        control={control}
-                        render={({ field }) => <Input {...field} />}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="pwd">Password: </label>
-                    <Controller
-                        name="password"
-                        control={control}
-                        render={({ field }) => <Input {...field} />}
-                    />
-                </div>
+        <Box
+            component="form"
+            sx={{
+                '& .MuiTextField-root': { m: 1, width: '25ch' },
+            }}
+            noValidate
+            autoComplete="off"
+        >
+            <div>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <div>
+                        <TextField
+                            required
+                            id="username"
+                            label="Username"
+                            variant="outlined"
+                        />
+                        <TextField
+                            required
+                            id="pwd"
+                            label="Password"
+                            type="password"
+                            variant="outlined"
+                            autoComplete="current-password"
+                        />
+                    </div>
 
-                <input type="submit" />
-            </form>
-        </div>
+                    <input type="submit" />
+                </form>
+            </div>
+        </Box>
+
 
     );
 };
