@@ -1,11 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import TextField from '@mui/material/TextField';
 import { Box } from "@mui/system";
 import Container from "@mui/material/Container";
+import { 
+    BrowserRouter as Router, 
+    Routes, 
+    Route, 
+    Link,
+    Navigate
+} from "react-router-dom";
+import Home from "../home/home";
 
 
-export default function Login() {
+export default function() {
+    const [user, setUser] = useState(null);
+    
     const {  register, handleSubmit } = useForm();
     
     const mocked_user = {
@@ -19,6 +29,7 @@ export default function Login() {
         if(data.username === mocked_user.username && data.pwd === mocked_user.pwd){
             console.log("LOGGED IN");
             /* TODO: transfer to other page */
+            setUser(data);
         }
         else{
             console.log("Incorrect username or password");
@@ -27,7 +38,9 @@ export default function Login() {
     };
 
     return (
+        
         <Container maxWidth="xs">
+            {user && <Navigate to="/home" replace={true} />}
             <h1>Login Page</h1>
             <Box
                 sx={{
@@ -60,6 +73,7 @@ export default function Login() {
                         </div>
 
                         <input type="submit" />
+                        {/* TODO: Better looking button */}
                     </div>
                 </form>
             </Box>
