@@ -28,7 +28,7 @@ export default function() {
         console.log(data);
         if(data.username === mocked_user.username && data.pwd === mocked_user.pwd){
             console.log("LOGGED IN");
-            /* TODO: transfer to other page */
+            // set user for transferring to home page
             setUser(data);
         }
         else{
@@ -40,6 +40,7 @@ export default function() {
     return (
         
         <Container maxWidth="xs">
+            {/* After successful login transfer to home page */}
             {user && <Navigate to="/home" replace={true} />}
             <h1>Login Page</h1>
             <Box
