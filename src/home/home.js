@@ -1,4 +1,41 @@
 import React, { useEffect, useState } from "react";
+import { Button } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+import Box from "@mui/material/Box";
+
+// Table columns
+const columns = [
+    {
+        field: 'id',
+        headerName: 'ID',
+        width: 90,
+    },
+    {
+        field: 'name',
+        headerName: 'Name',
+        width: 150,
+        editable: true,
+    },
+    {
+        field: 'surname',
+        headerName: 'Surname',
+        width: 150,
+        editable: true,
+    },
+    {
+        field: 'age',
+        headerName: 'Age',
+        type: 'number',
+        width: 110,
+        editable: true,
+    },
+    {
+        field: 'disease',
+        headerName: 'Disease',
+        editable: true,
+        width: 700
+    },
+];
 
 export default function Home() {
     const [data, setData] = useState([]);
@@ -26,11 +63,27 @@ export default function Home() {
     }, []);
 
 
+
     return (
         <div>
             <h1>HOME PAGE</h1>
+            <Button
+                onClick={() => console.log("NEW RECORD CREATED")}
+                variant="contained"
+            >
+                CREATE NEW RECORD
+            </Button>
             <div>
-                <table>
+                <Box sx={{ height: 800, width: '100%' }}>
+                    <DataGrid
+                        rows={data}
+                        columns={columns}
+                        checkboxSelection
+                        disableSelectionOnClick
+                    >
+                    </DataGrid>
+                </Box>
+                {/* <table>
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -43,7 +96,10 @@ export default function Home() {
                     <tbody>
                         {data.map((patient, index) => {
                             return (
-                                <tr>
+                                <tr
+                                    key={patient.id}
+                                    onClick={() => console.log(patient.id)}
+                                >
                                     <td>{patient.id}</td>
                                     <td>{patient.name}</td>
                                     <td>{patient.surname}</td>
@@ -52,9 +108,8 @@ export default function Home() {
                                 </tr>
                             )
                         })}
-                        {console.log(data)}
                     </tbody>
-                </table>
+                </table> */}
             </div>
         </div>
     )
