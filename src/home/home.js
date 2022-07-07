@@ -3,11 +3,13 @@ import { Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from "@mui/material/TextField";
 import { useForm } from "react-hook-form";
+import { IconButton } from '@mui/material';
+import { DeleteOutlined } from "@mui/icons-material";
+
 
 // Table columns
 const columns = [
@@ -41,6 +43,7 @@ const columns = [
         editable: true,
         width: 700
     },
+
 ];
 
 const dummy_record = {
@@ -56,10 +59,12 @@ export default function Home() {
     const [data, setData] = useState([]);
     const [openDialog, setOpenDialog] = useState(false);
     const [maxId, setMaxId] = useState(0);
+    const [selectionModel, setSelectionModel] = useState([]);
+
 
     const { register, handleSubmit } = useForm();
 
-    
+
     const loadData = () => {
         fetch('./MOCK_DATA.json',
             {
@@ -95,6 +100,7 @@ export default function Home() {
         var newRecord = {};
 
         // TODO: generate unique ID
+        console.log(data.length)
         setMaxId(data.length);
         newRecord.id = maxId + 1;
         setMaxId(maxId + 1);
@@ -122,10 +128,20 @@ export default function Home() {
                 CREATE NEW RECORD
             </Button>
 
+            <IconButton
+                onClick={() => {
+                    console.log("delete selected");
+                    const selectedIds = new Set(selectionModel);
+                    setData((d) => d.filter((x) => !selectedIds.has(x.id)));
+                }}
+            >
+                <DeleteOutlined>Delete selected records</DeleteOutlined>
+            </IconButton>
+
             <Dialog open={openDialog} onClose={handleCloseDialog}>
                 <DialogTitle>CREATE NEW RECORD</DialogTitle>
                 <DialogContent>
-                    <form 
+                    <form
                         onSubmit={handleSubmit(createNewRecord)}
                     >
                         <TextField
@@ -162,7 +178,7 @@ export default function Home() {
                             {...register("disease")}
                         />
 
-                        <Button 
+                        <Button
                             type="submit"
                             variant="outlined"
                             fullWidth>
@@ -179,6 +195,9 @@ export default function Home() {
                         columns={columns}
                         checkboxSelection
                         disableSelectionOnClick
+                        onSelectionModelChange={(ids) => {
+                            setSelectionModel(ids);
+                        }}
                     >
                     </DataGrid>
                 </Box>
