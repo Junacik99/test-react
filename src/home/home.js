@@ -2,6 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import TextField from "@mui/material/TextField";
+import { useForm } from "react-hook-form";
 
 // Table columns
 const columns = [
@@ -37,9 +43,23 @@ const columns = [
     },
 ];
 
+const dummy_record = {
+    "id": 101,
+    "name": "Blank",
+    "surname": "Blanky",
+    "age": 42,
+    "disease": "Happiness"
+};
+
+
 export default function Home() {
     const [data, setData] = useState([]);
+    const [openDialog, setOpenDialog] = useState(false);
+    const [maxId, setMaxId] = useState(0);
 
+    const { register, handleSubmit } = useForm();
+
+    
     const loadData = () => {
         fetch('./MOCK_DATA.json',
             {
@@ -60,19 +80,98 @@ export default function Home() {
 
     useEffect(() => {
         loadData();
+        console.log("MAX id " + maxId);
     }, []);
 
+    const handleOpenDialog = () => {
+        setOpenDialog(true);
+    };
 
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    };
+
+    const createNewRecord = (record) => {
+        var newRecord = {};
+
+        // TODO: generate unique ID
+        setMaxId(data.length);
+        newRecord.id = maxId + 1;
+        setMaxId(maxId + 1);
+
+        newRecord.name = record.name;
+        newRecord.surname = record.surname;
+        newRecord.age = record.age;
+        newRecord.disease = record.disease;
+
+        setData(data.concat(newRecord));
+    };
 
     return (
         <div>
             <h1>HOME PAGE</h1>
+
             <Button
-                onClick={() => console.log("NEW RECORD CREATED")}
+                onClick={() => {
+                    console.log("NEW RECORD CREATED");
+                    // setData(data.concat(dummy_record));
+                    handleOpenDialog();
+                }}
                 variant="contained"
             >
                 CREATE NEW RECORD
             </Button>
+
+            <Dialog open={openDialog} onClose={handleCloseDialog}>
+                <DialogTitle>CREATE NEW RECORD</DialogTitle>
+                <DialogContent>
+                    <form 
+                        onSubmit={handleSubmit(createNewRecord)}
+                    >
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="name"
+                            label="Name"
+                            required
+                            {...register("name")}
+                        />
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="surname"
+                            label="Surname"
+                            required
+                            {...register("surname")}
+                        />
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="age"
+                            label="Age"
+                            type="number"
+                            required
+                            {...register("age")}
+                        />
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="disease"
+                            label="Disease"
+                            required
+                            {...register("disease")}
+                        />
+
+                        <Button 
+                            type="submit"
+                            variant="outlined"
+                            fullWidth>
+                            CREATE
+                        </Button>
+                    </form>
+                </DialogContent>
+            </Dialog>
+
             <div>
                 <Box sx={{ height: 800, width: '100%' }}>
                     <DataGrid
