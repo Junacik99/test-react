@@ -46,19 +46,11 @@ const columns = [
 
 ];
 
-const dummy_record = {
-    "id": 101,
-    "name": "Blank",
-    "surname": "Blanky",
-    "age": 42,
-    "disease": "Happiness"
-};
-
 
 export default function Home() {
     const [data, setData] = useState([]);
     const [openDialog, setOpenDialog] = useState(false);
-    const [maxId, setMaxId] = useState(0);
+    const [maxId, setMaxId] = useState(100);
     const [selectionModel, setSelectionModel] = useState([]);
 
 
@@ -120,7 +112,6 @@ export default function Home() {
             <Button
                 onClick={() => {
                     console.log("NEW RECORD CREATED");
-                    // setData(data.concat(dummy_record));
                     handleOpenDialog();
                 }}
                 variant="contained"
@@ -201,33 +192,7 @@ export default function Home() {
                     >
                     </DataGrid>
                 </Box>
-                {/* <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Surname</th>
-                            <th>Age</th>
-                            <th>Disease</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {data.map((patient, index) => {
-                            return (
-                                <tr
-                                    key={patient.id}
-                                    onClick={() => console.log(patient.id)}
-                                >
-                                    <td>{patient.id}</td>
-                                    <td>{patient.name}</td>
-                                    <td>{patient.surname}</td>
-                                    <td>{patient.age}</td>
-                                    <td>{patient.disease}</td>
-                                </tr>
-                            )
-                        })}
-                    </tbody>
-                </table> */}
+                
             </div>
         </div>
     )
